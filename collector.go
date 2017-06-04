@@ -44,12 +44,12 @@ func (c *Collector) Error() string {
 	case 0:
 		return fmt.Sprintf("No error")
 	case 1:
-		return c.Errors[0].Error()
+		return c.Errors[0].ErrorWithCtx()
 	}
 
 	str := fmt.Sprintf("Got %d errors:\n", len(c.Errors))
 	for _, e := range c.Errors {
-		str = fmt.Sprintf("%s%s\n", str, e.Error())
+		str = fmt.Sprintf("%s%s\n", str, e.ErrorWithCtx())
 	}
 	return str
 }

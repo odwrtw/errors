@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"runtime"
+	"strings"
 
 	"github.com/Sirupsen/logrus"
 )
@@ -44,6 +45,15 @@ func (e *Error) AddContext(ctx Context) *Error {
 	return e
 }
 
+// String renders a context
+func (c Context) String() string {
+	var contexts []string
+	for k, v := range c {
+		contexts = append(contexts, fmt.Sprintf("%s:%s", k, v))
+	}
+	return strings.Join(contexts, " ")
+}
+
 // Ctx is a shortcut for AddContext for adding a single
 // key/val pair
 func (e *Error) Ctx(key string, val interface{}) *Error {
@@ -59,6 +69,11 @@ func (e *Error) GetCtx() Context {
 // Error implements error golang interface
 func (e *Error) Error() string {
 	return e.msg
+}
+
+// ErrorWithCtx will return a string of the error with its context
+func (e *Error) ErrorWithCtx() string {
+	return fmt.Sprintf("[%s] %s", e.ctx, e.msg)
 }
 
 // Stack returns the callstack formatted the same way that go does
